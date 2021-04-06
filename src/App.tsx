@@ -1,8 +1,14 @@
 import React from 'react';
-import Loading from './components/common/Loading/Loading';
+import Header from './components/common/Header/Header';
+import SideDrawer from './components/common/SideDrawer/SideDrawer';
 
 function App() {
-  return <Loading />;
+  return (
+    <div>
+      <Header />
+      <SideDrawer />
+    </div>
+  );
 }
 
 export default App;
