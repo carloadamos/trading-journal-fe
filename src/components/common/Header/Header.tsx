@@ -7,6 +7,7 @@ const Header = () => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       appBar: {
+        background: 'blue',
         zIndex: theme.zIndex.drawer + 1,
       },
       grow: {
