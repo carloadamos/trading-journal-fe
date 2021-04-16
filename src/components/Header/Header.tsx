@@ -3,7 +3,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-const Header = () => {
+const Header: React.VoidFunctionComponent = () => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       appBar: {

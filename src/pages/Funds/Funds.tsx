@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Funds = () => {
+const Funds: React.VoidFunctionComponent = () => {
   return <div>Funds</div>;
 };
 

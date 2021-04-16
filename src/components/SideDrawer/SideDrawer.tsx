@@ -6,7 +6,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
-const SideDrawer = () => {
+const SideDrawer: React.VoidFunctionComponent = () => {
   const drawerWidth = 240;
 
   const useStyles = makeStyles((theme: Theme) =>

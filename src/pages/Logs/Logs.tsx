@@ -1,4 +1,5 @@
 import React from 'react';
+import { gql, useQuery } from '@apollo/client';
 import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,6 +8,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { CircularProgress } from '@material-ui/core';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import NumberFormat from 'react-number-format';
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -30,71 +34,107 @@ const StyledTableRow = withStyles((theme: Theme) =>
   })
 )(TableRow);
 
-function createData(
-  tradeNo: number,
-  code: string,
-  tradeDate: string,
-  action: string,
-  price: string,
-  shares: string,
-  overrideFees: string,
-  fees: string,
-  net: string
-) {
-  return { tradeNo, code, tradeDate, action, price, shares, overrideFees, fees, net };
-}
-
-const rows = [
-  createData(1, 'NOW', '2020-01-01', 'BUY', '10.5', '1000', '10', '10', '10000'),
-  createData(2, 'NOW', '2020-01-01', 'BUY', '10.0', '1000', '10', '10', '10000'),
-  createData(3, 'NOW', '2020-01-01', 'BUY', '10.0', '1000', '10', '10', '10000'),
-  createData(4, 'NOW', '2020-01-01', 'BUY', '10.0', '1000', '10', '10', '10000'),
-  createData(5, 'NOW', '2020-01-01', 'BUY', '10.0', '1000', '10', '10', '10000'),
-];
-
 const useStyles = makeStyles({
   table: {
     minWidth: 700,
   },
 });
 
-export default function Logs() {
-  const classes = useStyles();
-
-  return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Trade No.</StyledTableCell>
-            <StyledTableCell align="center">Stock Code</StyledTableCell>
-            <StyledTableCell align="center">Trade Date</StyledTableCell>
-            <StyledTableCell align="center">Action</StyledTableCell>
-            <StyledTableCell align="center">Price</StyledTableCell>
-            <StyledTableCell align="center">Shares</StyledTableCell>
-            <StyledTableCell align="center">Override Fee</StyledTableCell>
-            <StyledTableCell align="center">Fees</StyledTableCell>
-            <StyledTableCell align="center">Net</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.code}>
-              <StyledTableCell component="th" scope="row">
-                {row.tradeNo}
-              </StyledTableCell>
-              <StyledTableCell align="center">{row.code}</StyledTableCell>
-              <StyledTableCell align="center">{row.tradeDate}</StyledTableCell>
-              <StyledTableCell align="center">{row.action}</StyledTableCell>
-              <StyledTableCell align="center">{row.price}</StyledTableCell>
-              <StyledTableCell align="center">{row.shares}</StyledTableCell>
-              <StyledTableCell align="center">{row.overrideFees}</StyledTableCell>
-              <StyledTableCell align="center">{row.fees}</StyledTableCell>
-              <StyledTableCell align="center">{row.net}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+
+interface Trade {
+  id: number;
+  tradeDate: string;
+  code: string;
+  action: string;
+  price: string;
+  shares: string;
+  overrideFees: string;
+  net: string;
+  fees: string;
+}
+
+interface TradeData {
+  tradeLogs: Trade[];
+}
+
+const GET_TRADES = gql`
+  query GetTrades {
+    tradeLogs {
+      id
+      tradeDate
+      code
+      action
+      price
+      shares
+      overrideFees
+      net
+      fees
+    }
+  }
+`;
+
+const Logs: React.VoidFunctionComponent = () => {
+  const classes = useStyles();
+  const { loading, error, data } = useQuery<TradeData>(GET_TRADES);
+  let rowCount = 0;
+
+  if (loading) return <CircularProgress />;
+  if (error) return <Alert severity="error">Error with GraphQL!</Alert>;
+
+  if (data) {
+    return (
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Trade Number</StyledTableCell>
+              <StyledTableCell align="center">Stock Code</StyledTableCell>
+              <StyledTableCell align="center">Trade Date</StyledTableCell>
+              <StyledTableCell align="center">Action</StyledTableCell>
+              <StyledTableCell align="right">Price</StyledTableCell>
+              <StyledTableCell align="right">Shares</StyledTableCell>
+              <StyledTableCell align="right">Override Fee</StyledTableCell>
+              <StyledTableCell align="right">Fees</StyledTableCell>
+              <StyledTableCell align="right">Net</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.tradeLogs.map((row) => {
+              rowCount += 1;
+
+              return (
+                <StyledTableRow key={row.id}>
+                  <StyledTableCell component="th" scope="row">
+                    {rowCount}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{row.code}</StyledTableCell>
+                  <StyledTableCell align="center">{row.tradeDate}</StyledTableCell>
+                  <StyledTableCell align="center">{row.action}</StyledTableCell>
+                  <StyledTableCell align="right">
+                    <NumberFormat value={row.price} displayType="text" thousandSeparator prefix="₱ " />
+                  </StyledTableCell>
+                  <StyledTableCell align="right">{row.shares}</StyledTableCell>
+                  <StyledTableCell align="right">
+                    <NumberFormat value={row.overrideFees} displayType="text" thousandSeparator prefix="₱ " />
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <NumberFormat value={row.fees} displayType="text" thousandSeparator prefix="₱ " />
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <NumberFormat value={row.net} displayType="text" thousandSeparator prefix="₱ " />
+                  </StyledTableCell>
+                </StyledTableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  }
+  return <div>No data</div>;
+};
+
+export default Logs;

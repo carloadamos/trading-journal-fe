@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Dashboard = () => {
+const Dashboard: React.VoidFunctionComponent = () => {
   return <div>Dashboard</div>;
 };
 

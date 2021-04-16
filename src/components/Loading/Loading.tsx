@@ -1,7 +1,7 @@
 import React from 'react';
 import { LinearProgress } from '@material-ui/core';
 
-const Loading = () => {
+const Loading: React.VoidFunctionComponent = () => {
   return <LinearProgress />;
 };
 
