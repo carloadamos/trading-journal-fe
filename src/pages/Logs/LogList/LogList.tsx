@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -8,7 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Typography } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import NumberFormat from 'react-number-format';
 
@@ -76,10 +76,20 @@ const GET_TRADES = gql`
   }
 `;
 
-const Logs: React.VoidFunctionComponent = () => {
+const LogList: React.VoidFunctionComponent = () => {
   const classes = useStyles();
-  const { loading, error, data } = useQuery<TradeData>(GET_TRADES);
+  const { loading, error, data } = useQuery<TradeData>(GET_TRADES, { fetchPolicy: 'no-cache' });
+  const [logs, setLogs] = useState<Trade[]>([]);
   let rowCount = 0;
+
+  useEffect(() => {
+    console.log('useEffect');
+    if (data && data.tradeLogs) {
+      console.log('setlogs');
+      console.log(data.tradeLogs);
+      setLogs(data.tradeLogs);
+    }
+  }, [data]);
 
   if (loading) return <CircularProgress />;
   if (error) return <Alert severity="error">Error with GraphQL!</Alert>;
@@ -102,7 +112,7 @@ const Logs: React.VoidFunctionComponent = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.tradeLogs.map((row) => {
+            {logs.map((row) => {
               rowCount += 1;
 
               return (
@@ -110,21 +120,37 @@ const Logs: React.VoidFunctionComponent = () => {
                   <StyledTableCell component="th" scope="row">
                     {rowCount}
                   </StyledTableCell>
-                  <StyledTableCell align="center">{row.code}</StyledTableCell>
-                  <StyledTableCell align="center">{row.tradeDate}</StyledTableCell>
-                  <StyledTableCell align="center">{row.action}</StyledTableCell>
-                  <StyledTableCell align="right">
-                    <NumberFormat value={row.price} displayType="text" thousandSeparator prefix="₱ " />
+                  <StyledTableCell align="center">
+                    <Typography variant="body1">{row.code}</Typography>
                   </StyledTableCell>
-                  <StyledTableCell align="right">{row.shares}</StyledTableCell>
-                  <StyledTableCell align="right">
-                    <NumberFormat value={row.overrideFees} displayType="text" thousandSeparator prefix="₱ " />
+                  <StyledTableCell align="center">
+                    <Typography variant="body1">{row.tradeDate}</Typography>
                   </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <NumberFormat value={row.fees} displayType="text" thousandSeparator prefix="₱ " />
+                  <StyledTableCell align="center">
+                    <Typography variant="body1">{row.action}</Typography>
                   </StyledTableCell>
                   <StyledTableCell align="right">
-                    <NumberFormat value={row.net} displayType="text" thousandSeparator prefix="₱ " />
+                    <Typography variant="body1">
+                      <NumberFormat value={row.price} displayType="text" thousandSeparator prefix="₱ " />
+                    </Typography>
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <Typography variant="body1">{row.shares}</Typography>
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <Typography variant="body1">
+                      <NumberFormat value={row.overrideFees} displayType="text" thousandSeparator prefix="₱ " />
+                    </Typography>
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <Typography variant="body1">
+                      <NumberFormat value={row.fees} displayType="text" thousandSeparator prefix="₱ " />
+                    </Typography>
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <Typography variant="body1">
+                      <NumberFormat value={row.net} displayType="text" thousandSeparator prefix="₱ " />
+                    </Typography>
                   </StyledTableCell>
                 </StyledTableRow>
               );
@@ -137,4 +163,4 @@ const Logs: React.VoidFunctionComponent = () => {
   return <div>No data</div>;
 };
 
-export default Logs;
+export default LogList;

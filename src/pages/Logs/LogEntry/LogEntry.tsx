@@ -66,7 +66,7 @@ function NumberFormatCustom(props: any) {
 const LogEntry: React.VoidFunctionComponent = () => {
   const classes = useStyles();
   const currentDate = new Date();
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState('CODE');
   const [tradeDate, setTradeDate] = useState(currentDate.toISOString().slice(0, 10));
   const [action, setAction] = useState('BUY');
   const [price, setPrice] = useState(0);

@@ -9,6 +9,7 @@ import {
   ExpandLess,
   Notes as NotesIcon,
   NoteAdd as NoteAddIcon,
+  Info as InfoIcon,
 } from '@material-ui/icons';
 import { Drawer, CssBaseline, Toolbar, List, ListItem, ListItemIcon, ListItemText, Collapse } from '@material-ui/core';
 
@@ -18,10 +19,11 @@ import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/c
 import Header from './components/Header/Header';
 
 // Pages
-import Logs from './pages/Logs/Logs';
+import LogList from './pages/Logs/LogList/LogList';
 import Funds from './pages/Funds/Funds';
 import LogEntry from './pages/Logs/LogEntry/LogEntry';
 import Dashboard from './pages/Dashboard/Dashboard';
+import StockData from './pages/Stock Data/StockData';
 
 const drawerWidth = 240;
 
@@ -123,6 +125,12 @@ const App: React.VoidFunctionComponent = () => {
                   </ListItemIcon>
                   <ListItemText primary="Funds" />
                 </ListItem>
+                <ListItem component={Link} to="/data" button key="data">
+                  <ListItemIcon>
+                    <InfoIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Data" />
+                </ListItem>
               </List>
             </div>
           </Drawer>
@@ -133,13 +141,16 @@ const App: React.VoidFunctionComponent = () => {
                 <Dashboard />
               </Route>
               <Route path="/logs">
-                <Logs />
+                <LogList />
               </Route>
               <Route path="/funds">
                 <Funds />
               </Route>
               <Route path="/entry">
                 <LogEntry />
+              </Route>
+              <Route path="/data">
+                <StockData />
               </Route>
             </Switch>
           </main>

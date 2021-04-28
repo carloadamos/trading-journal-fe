@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Summary = () => {
+const Summary: React.VoidFunctionComponent = () => {
   return <div>Summary</div>;
 };
 
