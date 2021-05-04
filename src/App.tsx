@@ -23,6 +23,7 @@ import LogList from './pages/Logs/LogList/LogList';
 import Funds from './pages/Funds/Funds';
 import LogEntry from './pages/Logs/LogEntry/LogEntry';
 import Dashboard from './pages/Dashboard/Dashboard';
+import StockHistory from './pages/Stock History/StockHistory';
 import StockData from './pages/Stock Data/StockData';
 
 const drawerWidth = 240;
@@ -131,6 +132,12 @@ const App: React.VoidFunctionComponent = () => {
                   </ListItemIcon>
                   <ListItemText primary="Data" />
                 </ListItem>
+                <ListItem component={Link} to="/history" button key="history">
+                  <ListItemIcon>
+                    <InfoIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="History" />
+                </ListItem>
               </List>
             </div>
           </Drawer>
@@ -151,6 +158,9 @@ const App: React.VoidFunctionComponent = () => {
               </Route>
               <Route path="/data">
                 <StockData />
+              </Route>
+              <Route path="/history">
+                <StockHistory />
               </Route>
             </Switch>
           </main>

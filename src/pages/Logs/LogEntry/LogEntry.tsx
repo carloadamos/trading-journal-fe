@@ -3,6 +3,7 @@ import NumberFormat from 'react-number-format';
 import {
   Button,
   createStyles,
+  Divider,
   FormControl,
   InputLabel,
   makeStyles,
@@ -10,6 +11,7 @@ import {
   Select,
   TextField,
   Theme,
+  Typography,
 } from '@material-ui/core';
 import { gql, useMutation } from '@apollo/client';
 
@@ -25,6 +27,9 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
       width: 200,
+    },
+    divider: {
+      margin: theme.spacing(2, 0, 2, 0),
     },
   })
 );
@@ -117,87 +122,91 @@ const LogEntry: React.VoidFunctionComponent = () => {
   };
 
   return (
-    <form className={classes.root} onSubmit={handleSubmit} autoComplete="off">
-      <TextField id="outlined-basic" onChange={handleCodeChange} value={code} label="Stock Code" variant="outlined" />
-      <TextField
-        variant="outlined"
-        id="tradeDate"
-        label="Trade Date"
-        type="date"
-        defaultValue={tradeDate}
-        className={classes.textField}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        onChange={handleTradeDateChange}
-      />
-      <FormControl variant="outlined">
-        <InputLabel id="demo-simple-select-outlined-label">Age</InputLabel>
-        <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={action}
-          onChange={handleActionChange}
-          label="Action"
-        >
-          <MenuItem value="BUY">BUY</MenuItem>
-          <MenuItem value="SELL">SELL</MenuItem>
-        </Select>
-      </FormControl>
-      <TextField
-        id="outlined-basic"
-        value={price}
-        onChange={handlePriceChange}
-        label="Price"
-        variant="outlined"
-        InputProps={{
-          inputComponent: NumberFormatCustom,
-        }}
-      />
-      <TextField
-        id="outlined-basic"
-        value={shares}
-        onChange={handleSharesChange}
-        label="Shares"
-        variant="outlined"
-        InputProps={{
-          inputComponent: NumberFormatCustom,
-        }}
-      />
-      <TextField
-        id="outlined-basic"
-        value={overrideFees}
-        onChange={handleOverrideFeesChange}
-        label="Override Fees"
-        variant="outlined"
-        InputProps={{
-          inputComponent: NumberFormatCustom,
-        }}
-      />
-      <TextField
-        id="outlined-basic"
-        value={fees}
-        onChange={handleFeesChange}
-        label="Fees"
-        variant="outlined"
-        InputProps={{
-          inputComponent: NumberFormatCustom,
-        }}
-      />
-      <TextField
-        id="outlined-basic"
-        value={net}
-        onChange={handleNetChange}
-        label="Net"
-        variant="outlined"
-        InputProps={{
-          inputComponent: NumberFormatCustom,
-        }}
-      />
-      <Button type="submit" variant="contained" color="primary">
-        Submit
-      </Button>
-    </form>
+    <>
+      <Typography variant="h2">Trade Entry</Typography>
+      <Divider className={classes.divider} variant="middle" />
+      <form className={classes.root} onSubmit={handleSubmit} autoComplete="off">
+        <TextField id="outlined-basic" onChange={handleCodeChange} value={code} label="Stock Code" variant="outlined" />
+        <TextField
+          variant="outlined"
+          id="tradeDate"
+          label="Trade Date"
+          type="date"
+          defaultValue={tradeDate}
+          className={classes.textField}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          onChange={handleTradeDateChange}
+        />
+        <FormControl variant="outlined">
+          <InputLabel id="demo-simple-select-outlined-label">Age</InputLabel>
+          <Select
+            labelId="demo-simple-select-outlined-label"
+            id="demo-simple-select-outlined"
+            value={action}
+            onChange={handleActionChange}
+            label="Action"
+          >
+            <MenuItem value="BUY">BUY</MenuItem>
+            <MenuItem value="SELL">SELL</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField
+          id="outlined-basic"
+          value={price}
+          onChange={handlePriceChange}
+          label="Price"
+          variant="outlined"
+          InputProps={{
+            inputComponent: NumberFormatCustom,
+          }}
+        />
+        <TextField
+          id="outlined-basic"
+          value={shares}
+          onChange={handleSharesChange}
+          label="Shares"
+          variant="outlined"
+          InputProps={{
+            inputComponent: NumberFormatCustom,
+          }}
+        />
+        <TextField
+          id="outlined-basic"
+          value={overrideFees}
+          onChange={handleOverrideFeesChange}
+          label="Override Fees"
+          variant="outlined"
+          InputProps={{
+            inputComponent: NumberFormatCustom,
+          }}
+        />
+        <TextField
+          id="outlined-basic"
+          value={fees}
+          onChange={handleFeesChange}
+          label="Fees"
+          variant="outlined"
+          InputProps={{
+            inputComponent: NumberFormatCustom,
+          }}
+        />
+        <TextField
+          id="outlined-basic"
+          value={net}
+          onChange={handleNetChange}
+          label="Net"
+          variant="outlined"
+          InputProps={{
+            inputComponent: NumberFormatCustom,
+          }}
+        />
+        <Button type="submit" variant="contained" color="primary">
+          Submit
+        </Button>
+      </form>
+    </>
   );
 };
 
